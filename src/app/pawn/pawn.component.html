@@ -1,0 +1,67 @@
+<div class="container mt-5">
+    <h1 class="text-center">Pawn Simulator</h1>
+    <div class="row mt-4">
+        <!-- Input Section -->
+        <div class="col-md-4">
+            <h3>Enter Position Details</h3>
+            <form [formGroup]="pawnForm" (ngSubmit)="placePawn()">
+                <div class="mb-3">
+                    <label for="x" class="form-label">X Coordinate</label>
+                    <input type="number" id="x" class="form-control" formControlName="x" />
+                    <small class="text-danger" *ngIf="pawnControls['x'].touched && pawnControls['x'].invalid">
+                        X must be between 0 and 7.
+                    </small>
+                </div>
+                <div class="mb-3">
+                    <label for="y" class="form-label">Y Coordinate</label>
+                    <input type="number" id="y" class="form-control" formControlName="y" />
+                    <small class="text-danger" *ngIf="pawnControls['y'].touched && pawnControls['y'].invalid">
+                        Y must be between 0 and 7.
+                    </small>
+                </div>
+                <div class="mb-3">
+                    <label for="direction" class="form-label">Direction</label>
+                    <select id="direction" class="form-select" formControlName="direction">
+                        <option value="NORTH">North</option>
+                        <option value="EAST">East</option>
+                        <option value="SOUTH">South</option>
+                        <option value="WEST">West</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="color" class="form-label">Color</label>
+                    <input type="color" id="color" class="form-control" formControlName="color" />
+                </div>
+                <button type="submit" class="btn btn-primary w-100" [disabled]="pawnForm.invalid">
+                    Place Pawn
+                </button>
+            </form>
+        </div>
+
+        <!-- Chessboard Section -->
+        <div class="col-md-8">
+            <h3>Chess Board</h3>
+            <div class="board">
+                <div *ngFor="let row of board; let i = index" class="row">
+                    <div *ngFor="let cell of row; let j = index" class="cell" [ngStyle]="getCellStyle(i, j)">
+                        <span *ngIf="pawnPosition.x === j && pawnPosition.y === i"
+                            [ngStyle]="{ color: pawnForm.value.color }">
+                            <!-- Display Chess Piece and Arrow -->
+                            ♟ <br />
+                            {{ directionArrows[pawnPosition.direction] }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="controls mt-3 text-center">
+                <button class="btn btn-secondary me-2" (click)="rotatePawn('LEFT')">
+                    Left
+                </button>
+                <button class="btn btn-secondary me-2" (click)="rotatePawn('RIGHT')">
+                    Right
+                </button>
+                <button class="btn btn-success" (click)="movePawn()">Move</button>
+            </div>
+        </div>
+    </div>
+</div>
